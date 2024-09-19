@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doha's Slug Generating Tool</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: pink;
+            background-image: url('https://www.transparenttextures.com/patterns/flowers.png');
+            background-repeat: repeat;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            font-style: italic;
+            font-size: 3rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+        }
+        input, button, select {
+            padding: 10px;
+            margin: 10px;
+            font-size: 1rem;
+            font-style: italic;
+            border-radius: 10px;
+            border: 2px solid #ffffff;
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+        .info-btn {
+            background-color: #FF69B4;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 0.8rem;
+            margin-left: 5px;
+            font-style: italic;
+        }
+        .tooltip {
+            display: none;
+            background-color: #fff;
+            color: #333;
+            text-align: left;
+            border: 1px solid #ccc;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            width: 250px;
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
+            font-style: italic;
+        }
+        .tooltip.show {
+            display: block;
+        }
+        .generated-slug {
+            font-size: 1.5rem;
+            color: #800080;
+            font-style: italic;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        .hashtag-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+        }
+        .hashtag-title {
+            font-size: 2rem;
+            color: #ff1493;
+            font-style: italic;
+        }
+        .trending-hashtags, .generated-hashtags {
+            font-size: 1.2rem;
+            color: #333;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Doha's Slug Generating Tool</h1>
+
+    <!-- Text Input -->
+    <label for="inputText">Enter Text:</label>
+    <input type="text" id="inputText" placeholder="Enter your text">
+    <button class="info-btn" onclick="showTooltip('textTooltip')">i</button>
+    <div id="textTooltip" class="tooltip">This is the main content for your slug. Example: 'New Product Launch'.</div><br>
+
+    <!-- Slug Template Dropdown -->
+    <label for="template">Choose a Slug Template:</label>
+    <select id="template">
+        <option value="default">Default</option>
+        <option value="campaign">Campaign - [campaignName]_[platform]_[date]</option>
+        <option value="ad">Ad - [campaignName]_[platform]_[contentType]</option>
+    </select>
+    <button class="info-btn" onclick="showTooltip('templateTooltip')">i</button>
+    <div id="templateTooltip" class="tooltip">Select a predefined template for the slug. Example: 'Campaign' for marketing campaigns.</div><br>
+
+    <!-- Platform Selection -->
+    <label>Select Platforms:</label><br>
+    <input type="checkbox" id="facebook" value="Facebook"> Facebook
+    <input type="checkbox" id="instagram" value="Instagram"> Instagram
+    <input type="checkbox" id="twitter" value="Twitter"> Twitter
+    <input type="checkbox" id="tiktok" value="TikTok"> TikTok
+    <input type="checkbox" id="spotify" value="Spotify"> Spotify
+    <input type="checkbox" id="website" value="Website"> Website
+    <input type="checkbox" id="mobileApp" value="MobileApp"> Mobile App
+    <button class="info-btn" onclick="showTooltip('platformTooltip')">i</button>
+    <div id="platformTooltip" class="tooltip">Choose the platforms where you will post the content. Example: Facebook, Instagram, TikTok, Spotify, Website, or Mobile App.</div><br>
+
+    <!-- Campaign Name -->
+    <label for="campaignName">Campaign Name:</label>
+    <input type="text" id="campaignName" placeholder="Enter campaign name">
+    <button class="info-btn" onclick="showTooltip('campaignTooltip')">i</button>
+    <div id="campaignTooltip" class="tooltip">Name of the campaign for tracking. Example: 'Winter Sale 2024'.</div><br>
+
+    <!-- Version Dropdown -->
+    <label for="version">Version:</label>
+    <select id="version">
+        <option value="v1">v1</option>
+        <option value="v2">v2</option>
+    </select>
+    <button class="info-btn" onclick="showTooltip('versionTooltip')">i</button>
+    <div id="versionTooltip" class="tooltip">Choose the version of the content for A/B testing. Example: v1 for the first version, v2 for the second version.</div><br>
+
+    <!-- Audience Segment & Geographic Region -->
+    <label for="audience">Audience Segment:</label>
+    <input type="text" id="audience" placeholder="Enter audience segment">
+    <button class="info-btn" onclick="showTooltip('audienceTooltip')">i</button>
+    <div id="audienceTooltip" class="tooltip">Specify the target audience segment. Example: 'Teens, Adults, Tech Enthusiasts'.</div><br>
+
+    <label for="geo">Geographic Region:</label>
+    <input type="text" id="geo" placeholder="Enter geographic region">
+    <button class="info-btn" onclick="showTooltip('geoTooltip')">i</button>
+    <div id="geoTooltip" class="tooltip">Specify the geographic region you are targeting. Example: 'North America, Europe'.</div><br>
+
+    <!-- Generate Slug Button -->
+    <button onclick="generateSlug()">Generate Slug</button><br>
+
+    <!-- Output -->
+    <p>Generated Slug: <span id="slugOutput" class="generated-slug"></span></p>
+
+    <!-- Download as CSV -->
+    <button onclick="downloadCSV()">Download as CSV</button>
+
+    <!-- Hashtag Generator Section -->
+    <div class="hashtag-section">
+        <h2 class="hashtag-title">Hashtag Generator</h2>
+
+        <!-- Hashtag Input -->
+        <label for="hashtagInput">Enter Topic for Hashtags:</label>
+        <input type="text" id="hashtagInput" placeholder="Enter a keyword or topic">
+        <button onclick="generateHashtags()">Generate Hashtags</button>
+
+        <!-- Trending Hashtags Section -->
+        <div id="hashtag-container">
+            Loading trending hashtags...
+        </div>
+    </div>
+
+    <script>
+        // Fetch unified trends from server
+        fetch("/api/twitter-trends")
+          .then(response => response.json())
+          .then(data => {
+              const container = document.getElementById('hashtag-container');
+              container.innerHTML = "";  // Clear existing content
+              
+              // Process Twitter trends
+              data.forEach(hashtag => {
+                  const hashtagElement = document.createElement('p');
+                  hashtagElement.textContent = `Twitter: ${hashtag}`;
+                  container.appendChild(hashtagElement);
+              });
+          })
+          .catch(error => {
+              console.error("Error fetching Twitter trends:", error);
+          });
+    </script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+const fetchTrendsFromUrl = async (url, selector) => {
+  try {
+    const { data } = await axios.get(url);
+    const $ = cheerio.load(data);
+    let trends = [];
+
+    $(selector).each((index, element) => {
+      const text = $(element).text().trim();
+      console.log(`Fetched element text: ${text}`); // Debugging line
+      trends.push(text);
+    });
+
+    console.log(`Fetched trends from ${url}:`, trends);
+    return trends;
+  } catch (error) {
+    console.error(`Error fetching trends from ${url}:`, error);
+    return [];
+  }
+};
