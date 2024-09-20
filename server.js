@@ -1,23 +1,13 @@
 const express = require("express");
 const axios = require("axios");
 const cheerio = require("cheerio");
-const cors = require("cors");
-const axiosRetry = require("axios-retry").default;
-const path = require('path');
+const path = require("path");
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-app.use(cors());
-
-// Retry failed requests
-axiosRetry(axios, {
-  retries: 3,
-  retryDelay: axiosRetry.exponentialDelay,
-});
-
-// Serve static files
-app.use(express.static(path.join(__dirname, 'public')));
+// Serve static files from the "public" folder
+app.use(express.static(path.join(__dirname, "public")));
 
 // Helper function to fetch and parse data from URLs with multiple columns
 const fetchTrendsFromUrl = async (url, rowSelector, columns) => {
@@ -45,7 +35,6 @@ const fetchTrendsFromUrl = async (url, rowSelector, columns) => {
 // Facebook trends scraping
 app.get("/facebook-trends", async (req, res) => {
   try {
-    // Update the selector to target the specific tag box elements
     const facebookTrends = await fetchTrendsFromUrl(
       "https://best-hashtags.com/hashtag/news/", 
       ".tag-box-v3 p"
@@ -61,7 +50,6 @@ app.get("/facebook-trends", async (req, res) => {
 // Google trends scraping
 app.get("/google-trends", async (req, res) => {
   try {
-    // Updated selector to fetch trend names inside div.mZ3RIc
     const googleTrends = await fetchTrendsFromUrl(
       "https://trends.google.com/trending?geo=TR&hl=en-US&sort=title&hours=4", 
       "div.mZ3RIc"
@@ -75,7 +63,7 @@ app.get("/google-trends", async (req, res) => {
 });
 
 // Unified API to fetch trending hashtags from various websites
-app.get("/unified-trends", async (req, res) => {
+app.get("/api/unified-trends", async (req, res) => {
   try {
     const twitterTrends = await fetchTrendsFromUrl("https://getdaytrends.com/", "tr", ["td:nth-child(1)", "td:nth-child(2)"]);
     const tiktokTrends = await fetchTrendsFromUrl("https://tiktokhashtags.com/hashtag/live/", "table tbody tr", ["td:nth-child(2)", "td:nth-child(3)", "td:nth-child(4)"]);
@@ -101,3 +89,5 @@ app.get("/unified-trends", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
+
+module.exports = app; // Make sure to export the app for Vercel

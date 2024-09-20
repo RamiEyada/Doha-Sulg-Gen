@@ -1,4 +1,5 @@
 {
+  "version": 2,
   "builds": [
     {
       "src": "server.js",
@@ -11,8 +12,12 @@
   ],
   "routes": [
     {
+      "src": "/api/unified-trends",
+      "dest": "/server.js"
+    },
+    {
       "src": "/(.*)",
-      "dest": "Public/$1"
+      "dest": "/Public/$1"
     }
   ]
 }
