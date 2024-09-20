@@ -1,4 +1,32 @@
-app.get("/unified-trends", async (req, res) => {
+const express = require("express");
+const router = express.Router(); // Use router to modularize the route
+const axios = require("axios");
+const cheerio = require("cheerio");
+
+// Helper function to fetch and parse data from URLs
+const fetchTrendsFromUrl = async (url, rowSelector, columns) => {
+  try {
+    const { data } = await axios.get(url);
+    const $ = cheerio.load(data);
+    let trends = [];
+
+    $(rowSelector).each((index, row) => {
+      let rowData = [];
+      columns.forEach(columnSelector => {
+        rowData.push($(row).find(columnSelector).text().trim());
+      });
+      trends.push(rowData);
+    });
+
+    return trends;
+  } catch (error) {
+    console.error(`Error fetching trends from ${url}:`, error);
+    return [];
+  }
+};
+
+// Route to fetch unified trends
+router.get("/", async (req, res) => {
   try {
     const twitterTrends = await fetchTrendsFromUrl("https://getdaytrends.com/", "tr", ["td:nth-child(1)", "td:nth-child(2)"]);
     const tiktokTrends = await fetchTrendsFromUrl("https://tiktokhashtags.com/hashtag/live/", "table tbody tr", ["td:nth-child(2)", "td:nth-child(3)", "td:nth-child(4)"]);
@@ -19,3 +47,5 @@ app.get("/unified-trends", async (req, res) => {
     res.status(500).send("Error fetching unified trends.");
   }
 });
+
+module.exports = router;

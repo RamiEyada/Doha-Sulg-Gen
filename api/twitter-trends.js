@@ -7,7 +7,8 @@ module.exports = async (req, res) => {
     const $ = cheerio.load(data);
     let trends = [];
     $("td.main a").each((index, element) => {
-      trends.push($(element).text().trim());
+      const hashtag = $(element).text().trim();
+      trends.push({ hashtag });  // Make this an object for future flexibility
     });
     res.json(trends.slice(0, 10000));
   } catch (error) {

@@ -164,6 +164,69 @@
         </div>
     </div>
 
+    <script>
+    fetch("/api/unified-trends")
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('hashtag-container');
+        container.innerHTML = "";  // Clear existing content
+
+        // Render Twitter trends
+        if (data.twitter.length > 0) {
+          data.twitter.forEach(row => {
+            const rowElement = document.createElement('p');
+            rowElement.textContent = `Twitter: ${row.join(' | ')}`; // Join all columns with a separator
+            container.appendChild(rowElement);
+          });
+        } else {
+          const noTwitterElement = document.createElement('p');
+          noTwitterElement.textContent = "No Twitter trends found.";
+          container.appendChild(noTwitterElement);
+        }
+
+        // Render TikTok trends
+        if (data.tiktok.length > 0) {
+          data.tiktok.forEach(row => {
+            const rowElement = document.createElement('p');
+            rowElement.textContent = `TikTok: ${row.join(' | ')}`;
+            container.appendChild(rowElement);
+          });
+        } else {
+          const noTikTokElement = document.createElement('p');
+          noTikTokElement.textContent = "No TikTok trends found.";
+          container.appendChild(noTikTokElement);
+        }
+
+        // Render Facebook trends
+        if (data.facebook.length > 0) {
+          data.facebook.forEach(row => {
+            const rowElement = document.createElement('p');
+            rowElement.textContent = `Facebook: ${row.join(' | ')}`;
+            container.appendChild(rowElement);
+          });
+        } else {
+          const noFacebookElement = document.createElement('p');
+          noFacebookElement.textContent = "No Facebook trends found.";
+          container.appendChild(noFacebookElement);
+        }
+
+        // Render Google trends
+        if (data.google.length > 0) {
+          data.google.forEach(row => {
+            const rowElement = document.createElement('p');
+            rowElement.textContent = `Google: ${row.join(' | ')}`;
+            container.appendChild(rowElement);
+          });
+        } else {
+          const noGoogleElement = document.createElement('p');
+          noGoogleElement.textContent = "No Google trends found.";
+          container.appendChild(noGoogleElement);
+        }
+      })
+      .catch(error => {
+        console.error("Error fetching trending hashtags:", error);
+      });
+    </script>
     <script src="/script.js"></script>
 </body>
 </html>
