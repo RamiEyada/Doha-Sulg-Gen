@@ -72,7 +72,12 @@ function generateHashtags() {
             `#${topic}Trends`,
         ];
 
-        document.getElementById("generatedHashtags").textContent = `Generated Hashtags: ${hashtags.join(', ')}`;
+        const generatedHashtagsElement = document.getElementById("generatedHashtags");
+        if (generatedHashtagsElement) {
+            generatedHashtagsElement.textContent = `Generated Hashtags: ${hashtags.join(', ')}`;
+        } else {
+            console.error("Element with id 'generatedHashtags' not found.");
+        }
     } else {
         document.getElementById("generatedHashtags").textContent = "Please enter a topic.";
     }

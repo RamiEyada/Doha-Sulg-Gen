@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router(); // Use router to modularize the route
+const router = express.Router(); 
 const axios = require("axios");
 const cheerio = require("cheerio");
 
@@ -12,7 +12,7 @@ const fetchTrendsFromUrl = async (url, rowSelector, columns) => {
 
     $(rowSelector).each((index, row) => {
       let rowData = [];
-      columns.forEach(columnSelector => {
+      columns.forEach((columnSelector) => {
         rowData.push($(row).find(columnSelector).text().trim());
       });
       trends.push(rowData);
@@ -20,19 +20,18 @@ const fetchTrendsFromUrl = async (url, rowSelector, columns) => {
 
     return trends;
   } catch (error) {
-    console.error(`Error fetching trends from ${url}:`, error);
-    return []; // Return empty array in case of an error
+    console.error(`Error fetching trends from ${url}:`, error.message);
+    return []; // If fetching from one URL fails, return an empty array to avoid breaking the entire API.
   }
 };
 
 // Route to fetch unified trends
 router.get("/", async (req, res) => {
   try {
-    // Fetch from all sources
-    const twitterTrends = await fetchTrendsFromUrl("https://getdaytrends.com/", "tr", ["td:nth-child(1)", "td:nth-child(2)"]) || [];
-    const tiktokTrends = await fetchTrendsFromUrl("https://tiktokhashtags.com/hashtag/live/", "table tbody tr", ["td:nth-child(2)", "td:nth-child(3)", "td:nth-child(4)"]) || [];
-    const googleTrends = await fetchTrendsFromUrl("https://trends.google.com/trending?geo=TR&hl=en-US&sort=title&hours=4", ".feed-item", ["span.title"]) || [];
-    const facebookTrends = await fetchTrendsFromUrl("https://best-hashtags.com/hashtag/news/", ".tag-box", ["a"]) || [];
+    const twitterTrends = await fetchTrendsFromUrl("https://getdaytrends.com/", "tr", ["td:nth-child(1)", "td:nth-child(2)"]).catch(() => []);
+    const tiktokTrends = await fetchTrendsFromUrl("https://tiktokhashtags.com/hashtag/live/", "table tbody tr", ["td:nth-child(2)", "td:nth-child(3)", "td:nth-child(4)"]).catch(() => []);
+    const googleTrends = await fetchTrendsFromUrl("https://trends.google.com/trending?geo=TR&hl=en-US&sort=title&hours=4", ".feed-item", ["span.title"]).catch(() => []);
+    const facebookTrends = await fetchTrendsFromUrl("https://best-hashtags.com/hashtag/news/", ".tag-box", ["a"]).catch(() => []);
 
     const allTrends = {
       twitter: twitterTrends.slice(0, 10000),
@@ -41,11 +40,11 @@ router.get("/", async (req, res) => {
       facebook: facebookTrends.slice(0, 10000),
     };
 
-    console.log("Unified trends:", allTrends);
-    res.json(allTrends); // Send the response
+    console.log("Unified trends fetched successfully:", allTrends);
+    res.json(allTrends);
   } catch (error) {
-    console.error("Error fetching unified trends:", error);
-    res.status(500).send({ error: "Error fetching unified trends" });
+    console.error("Error fetching unified trends:", error.message);
+    res.status(500).json({ error: "Error fetching unified trends", details: error.message });
   }
 });
 

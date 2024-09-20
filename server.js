@@ -11,7 +11,7 @@ const unifiedTrends = require("./api/unified-trends"); // Unified trends route
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Serve static files from the "public" folder
+// Serve static files from the "Public" folder
 app.use(express.static(path.join(__dirname, "Public")));
 
 // API Routes for individual trend sources
