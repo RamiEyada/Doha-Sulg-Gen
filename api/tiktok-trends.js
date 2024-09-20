@@ -1,7 +1,9 @@
+const express = require("express");
+const router = express.Router(); // Correcting to use router
 const axios = require("axios");
 const cheerio = require("cheerio");
 
-module.exports = async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const { data } = await axios.get("https://tiktokhashtags.com/hashtag/live/");
     const $ = cheerio.load(data);
@@ -15,4 +17,6 @@ module.exports = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Error fetching TikTok trends" });
   }
-};
+});
+
+module.exports = router;

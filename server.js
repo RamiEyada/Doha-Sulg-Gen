@@ -6,20 +6,20 @@ const facebookTrends = require("./api/facebook-trends");
 const googleTrends = require("./api/google-trends");
 const tiktokTrends = require("./api/tiktok-trends");
 const twitterTrends = require("./api/twitter-trends");
-const unifiedTrends = require("./api/unified-trends"); // Unified trends route
+const unifiedTrends = require("./api/unified-trends");
 
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Serve static files from the "Public" folder
-app.use(express.static(path.join(__dirname, "Public")));
+// Serve static files from the "public" folder
+app.use(express.static(path.join(__dirname, "public")));
 
 // API Routes for individual trend sources
 app.use("/api/facebook-trends", facebookTrends);
 app.use("/api/google-trends", googleTrends);
 app.use("/api/tiktok-trends", tiktokTrends);
 app.use("/api/twitter-trends", twitterTrends);
-app.use("/api/unified-trends", unifiedTrends); // Unified trends route
+app.use("/api/unified-trends", unifiedTrends);
 
 // Start the server
 app.listen(port, () => {

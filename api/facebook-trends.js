@@ -1,8 +1,12 @@
-app.get("/facebook-trends", async (req, res) => {
+const express = require("express");
+const router = express.Router(); // Correcting to use router
+const axios = require("axios");
+const cheerio = require("cheerio");
+
+router.get("/", async (req, res) => {
   try {
-    // Update the selector to target the specific tag box elements
     const facebookTrends = await fetchTrendsFromUrl(
-      "https://best-hashtags.com/hashtag/news/", 
+      "https://best-hashtags.com/hashtag/news/",
       ".tag-box-v3 p"
     );
     console.log("Fetched Facebook trends:", facebookTrends);
@@ -12,3 +16,5 @@ app.get("/facebook-trends", async (req, res) => {
     res.status(500).send("Error fetching Facebook trends.");
   }
 });
+
+module.exports = router;
