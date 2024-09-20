@@ -60,6 +60,7 @@ function downloadCSV() {
 // Function to generate hashtags based on input
 function generateHashtags() {
     let topic = document.getElementById("hashtagInput").value.trim().toLowerCase();
+    console.log("Topic entered:", topic); // Add this to debug
 
     if (topic) {
         let hashtags = [
@@ -72,12 +73,7 @@ function generateHashtags() {
             `#${topic}Trends`,
         ];
 
-        const generatedHashtagsElement = document.getElementById("generatedHashtags");
-        if (generatedHashtagsElement) {
-            generatedHashtagsElement.textContent = `Generated Hashtags: ${hashtags.join(', ')}`;
-        } else {
-            console.error("Element with id 'generatedHashtags' not found.");
-        }
+        document.getElementById("generatedHashtags").textContent = `Generated Hashtags: ${hashtags.join(', ')}`;
     } else {
         document.getElementById("generatedHashtags").textContent = "Please enter a topic.";
     }
