@@ -9,7 +9,7 @@ const port = process.env.PORT || 3000;
 // Serve static files from the "public" folder
 app.use(express.static(path.join(__dirname, "public")));
 
-// Helper function to fetch and parse data from URLs with multiple columns
+// Helper function to fetch and parse data from URLs
 const fetchTrendsFromUrl = async (url, rowSelector, columns) => {
   try {
     const { data } = await axios.get(url);
@@ -31,36 +31,6 @@ const fetchTrendsFromUrl = async (url, rowSelector, columns) => {
     return [];
   }
 };
-
-// Facebook trends scraping
-app.get("/facebook-trends", async (req, res) => {
-  try {
-    const facebookTrends = await fetchTrendsFromUrl(
-      "https://best-hashtags.com/hashtag/news/", 
-      ".tag-box-v3 p"
-    );
-    console.log("Fetched Facebook trends:", facebookTrends);
-    res.json(facebookTrends.slice(0, 10000));
-  } catch (error) {
-    console.error("Error fetching Facebook trends:", error);
-    res.status(500).send("Error fetching Facebook trends.");
-  }
-});
-
-// Google trends scraping
-app.get("/google-trends", async (req, res) => {
-  try {
-    const googleTrends = await fetchTrendsFromUrl(
-      "https://trends.google.com/trending?geo=TR&hl=en-US&sort=title&hours=4", 
-      "div.mZ3RIc"
-    );
-    console.log("Fetched Google trends:", googleTrends);
-    res.json(googleTrends.slice(0, 10000));
-  } catch (error) {
-    console.error("Error fetching Google trends:", error);
-    res.status(500).send("Error fetching Google trends.");
-  }
-});
 
 // Unified API to fetch trending hashtags from various websites
 app.get("/api/unified-trends", async (req, res) => {
@@ -90,4 +60,4 @@ app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
 
-module.exports = app; // Make sure to export the app for Vercel
+module.exports = app;
