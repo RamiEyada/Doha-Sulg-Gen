@@ -151,15 +151,21 @@
 
     <!-- Hashtag Generator Section -->
     <div class="hashtag-section">
-    <h2 class="hashtag-title">Hashtag Generator</h2>
+        <h2 class="hashtag-title">Hashtag Generator</h2>
 
-    <!-- Hashtag Input -->
-    <label for="hashtagInput">Enter Topic for Hashtags:</label>
-    <input type="text" id="hashtagInput" placeholder="Enter a keyword or topic">
-    <button type="button" onclick="generateHashtags()">Generate Hashtags</button>
+        <!-- Hashtag Input -->
+        <label for="hashtagInput">Enter Topic for Hashtags:</label>
+        <input type="text" id="hashtagInput" placeholder="Enter a keyword or topic">
+        <button type="button" onclick="generateHashtags()">Generate Hashtags</button>
 
-    <!-- Display Generated Hashtags -->
-    <div id="generatedHashtags"></div>
+        <!-- Display Generated Hashtags -->
+        <div id="generatedHashtags"></div>
+    </div>
+
+    <!-- Trending Hashtags Section -->
+    <div class="hashtag-section">
+        <h2 class="hashtag-title">Trending Hashtags</h2>
+        <div id="hashtag-container">Loading trending hashtags...</div> <!-- Correct container for trending hashtags -->
     </div>
 
     <script>
