@@ -59,5 +59,5 @@ app.get("/api/unified-trends", async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
-
+// At the end of server.js:
 module.exports = app;

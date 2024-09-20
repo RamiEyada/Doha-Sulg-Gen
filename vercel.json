@@ -4,10 +4,20 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "Public/*",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
-    { "src": "/api/unified-trends", "dest": "/server.js" },
-    { "src": "/(.*)", "dest": "/public/$1" }
+    {
+      "src": "/api/unified-trends",
+      "dest": "/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/Public/$1"
+    }
   ]
 }
