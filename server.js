@@ -12,7 +12,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Serve static files from the "public" folder
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "Public")));
 
 // API Routes for individual trend sources
 app.use("/api/facebook-trends", facebookTrends);
